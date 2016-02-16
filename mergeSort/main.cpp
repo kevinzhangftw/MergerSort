@@ -9,26 +9,71 @@
 #include <iostream>
 using namespace std;
 
-void Mergesort(int arr[], int low, int high);
+int Mergesort(int arr[], int arr_size);
+void printArray(int arr[], int arr_size);
+int doMergeSort(int arr[], int arr_size, int low, int high);
+int merge(int arr[], int arr_size, int low, int mid, int high);
 
 int main(int argc, const char * argv[]) {
     // insert code here...
+    int arr_size = 5;
     int arr[5] = {3,1,2,5,4};
-    int low = 0;
-    int high = 4;
-    Mergesort(arr, low, high);
-    
+    Mergesort(arr, arr_size);
+    printArray(arr, arr_size);
     return 0;
 }
 
-void Mergesort(int arr[], int low, int high){
+int Mergesort(int arr[], int arr_size){
+    int low = 0;
+    int high = arr_size-1;
+    int barOps = doMergeSort(arr, arr_size, low, high);
+    return barOps;
+}
+
+int doMergeSort(int arr[], int arr_size, int low, int high){
+    int barOps=0;
     if (low < high) {
         int mid= low + (high-low)/2;
-        Mergesort(arr, low, high);
-        Mergesort(arr, mid+1, high);
-        //Mergesort(arr, mid, high);
+        //sort left
+        doMergeSort(arr, arr_size, low, mid);
+        //sort right
+        doMergeSort(arr, arr_size, mid+1, high);
+        //merge
+        merge(arr, arr_size, low, mid, high);
     }
+    return barOps;
 }
+
+int merge(int arr[], int arr_size, int low, int mid, int high){
+    int barOps = 0;
+    int temp[arr_size];
+    for (int i=low; i<=high; ++i) {
+        temp[i] = arr[i];
+    }
+
+    int i = low;
+    int j = mid+1;
+    int k = low;
+    
+    while (i<= mid && j<=high) {
+        if (temp[i]<=temp[j]) {
+            arr[k] =temp[i];
+            ++i;
+        }else{
+            arr[k] =temp[j];
+            ++j;
+        }
+        ++k;
+    }
+    
+    while (i<=mid) {
+        arr[k] = temp[i];
+        ++k;
+        ++i;
+    }
+    return barOps;
+}
+
 
 void printArray(int arr[], int arr_size){
     //read every element of the array
